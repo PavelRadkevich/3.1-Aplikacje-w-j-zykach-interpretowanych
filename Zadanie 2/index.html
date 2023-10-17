@@ -1,27 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="theme.css" />
+    <link rel="stylesheet" type="text/css" href="theme.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="scripts.js"></script>
     <title>MyTODO App</title>
+    <meta charset="utf-8">
 </head>
-<body>
-    <h1>MyNotes</h1>
-    <div>
-        <label>Search</label>
-        <input type="text" id="inputSearch" placeholder="Type your search here" />
+<body data-bs-theme="dark">
+    <div class="container">
+        <h1 class="h1 mb-3 text-center">MyNotes</h1>
+        <div class="row mb-4 justify-content-center" >
+            <div class="col-2">
+                <input type="text" id="inputSearch" placeholder="Type your search here" class="form-control">
+                <div class="form-text">
+                    Search by word
+                </div>
+            </div>
+            <div class="col-2">
+                <input type="date" id="inputDateFrom" class="form-control">
+                <div class="form-text">
+                    Date From
+                </div>
+            </div>
+            <div class="col-2">
+                <input type="date" id="inputDateTo" class="form-control">
+                <div class="form-text text-left">
+                    Date To
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="todoListView"></div>
-    <form>
-        <label>Title</label>
-        <input type="text" id="inputTitle"/>
-        <label>Description</label>
-        <input type="text" id="inputDescription"/>
-        <label>Place</label>
-        <input type="text" id="inputPlace"/>
-        <label>Due Date</label>
-        <input type="date" id="inputDate"/>
-        <input type="button" value="add" onclick="addTodo()" />
+
+    <div class="container text-center mb-5">
+        <table class="table table-bordered">
+            <tbody id="todoListView">
+                <tr class="table-success">
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Place</th>
+                    <th scope="col">Due Date</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <form class="container border col-5">
+        <div class="mb-3">
+            <label for="inputTitle" class="form-label">Title</label>
+            <input type="text" id="inputTitle" class="form-control">
+            <div class="form-text">
+                Give the Name to the your Task
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="inputDescription" class="form-label">Description</label>
+            <input type="text" id="inputDescription" class="form-control">
+            <div class="form-text">
+                Some details
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="inputPlace" class="form-label">Place</label>
+            <input type="text" id="inputPlace" class="form-control">
+            <div class="form-text">
+                Where should you do it?
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="inputDate" class="form-label">Due Date</label>
+            <input type="date" id="inputDate" class="form-control">
+            <div class="form-text">
+                Your deadline
+            </div>
+        </div>
+        <div class="text-center mb-3">
+            <input type="button" class="btn btn-primary" value="Add" onclick="addTodo()">
+        </div>
     </form>
 </body>
 </html>

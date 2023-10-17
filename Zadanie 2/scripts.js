@@ -1,7 +1,8 @@
 "use strict"
 let todoList = []; //declares a new Array for Your todo list
+
 let initList = function () {
-    let savedList = window.localStorage.getItem("todos");
+   let savedList = window.localStorage.getItem("todos");
     if (savedList != null) {
         todoList = JSON.parse(savedList);
     }
@@ -24,58 +25,113 @@ let initList = function () {
     }
 }
 
-initList();
+let readAPI = function() {
+    let req = new XMLHttpRequest();
+
+    req.onreadystatechange = () => {
+        if (req.readyState == XMLHttpRequest.DONE) {
+            todoList = JSON.parse(req.responseText).record;
+        }
+    };
+    req.open("GET", "https://api.jsonbin.io/v3/b/652e995f0574da7622ba151f", true);
+    req.setRequestHeader("X-Master-Key", "$2a$10$wbDrNT7oAp8B3CTsAhzIi.5NNUMA6mrcxs/b.rU5s4q1Vae0cQ59u");
+    req.setRequestHeader("X-Access-Key", "$2a$10$bfr80LuP/W/mo5x/53QO4O84.NV3lLXQTLJn99xSv1Yn/sBmG5c/S")
+    req.send();
+}
+
+let updateJSONBin = function () {
+    let req = new XMLHttpRequest();
+
+    req.onreadystatechange = () => {
+        if (req.readyState == XMLHttpRequest.DONE) {
+            //console.log(req.responseText);
+        }
+    };
+
+    req.open("PUT", "https://api.jsonbin.io/v3/b/652e995f0574da7622ba151f", true);
+    req.setRequestHeader("Content-Type", "application/json");
+    req.setRequestHeader("X-Master-Key", "$2a$10$wbDrNT7oAp8B3CTsAhzIi.5NNUMA6mrcxs/b.rU5s4q1Vae0cQ59u");
+    req.send(JSON.stringify(todoList));
+}
 
 let updateTodoList = function () {
-    let todoListDiv = document.getElementById("todoListView");
+    let todoListTable = $("#todoListView");
     
 
     //Remove all elements
-    while (todoListDiv.firstChild) {
-        todoListDiv.removeChild(todoListDiv.firstChild);
-    }
+    $("#todoListView tr:not(:first)").remove();
 
     //Add all elements
-    let filterInput = document.getElementById("inputSearch");
+    let filterInput = $("#inputSearch").val();
+    let dateFrom = Date.parse($("#inputDateFrom").val()); 
+    let dateTo = Date.parse($("#inputDateTo").val());
     for (let todo in todoList) {
+        let dueDate = Date.parse(todoList[todo].dueDate);
         if (
-            (filterInput.value == "") ||
-            (todoList[todo].title.includes(filterInput.value)) ||
-            (todoList[todo].description.includes(filterInput.value))
+            (
+                (filterInput == "") ||
+                (todoList[todo].title.includes(filterInput)) ||
+                (todoList[todo].description.includes(filterInput)) ||
+                (todoList[todo].place.includes(filterInput))
+            )
+            &&
+            (
+                (
+                    ($("#inputDateFrom").val() == "") ||
+                    (dueDate >= dateFrom)
+                )
+                &&
+                (
+                    ($("#inputDateTo").val() == "") ||
+                    (dueDate <= dateTo)
+                )
+            )
+
         ) {
-            let newElement = document.createElement("div");
-            let newContent = document.createTextNode(todoList[todo].title + " " + todoList[todo].description);
-            let newDeleteButton = document.createElement("input");
-            newDeleteButton.type = "button";
-            newDeleteButton.value = "x";
-            newDeleteButton.addEventListener("click",
-                function () {
+
+            let newRow = $("<tr></tr>").addClass("table-dark");
+
+            let newTitleColumn = $("<td></td>").text(todoList[todo].title);
+            newRow.append(newTitleColumn);
+
+            let newDescColumn = $("<td></td>").text(todoList[todo].description);
+            newRow.append(newDescColumn);
+
+            let newPlaceColumn = $("<td></td>").text(todoList[todo].place);
+            newRow.append(newPlaceColumn);
+
+            let newDateColumn = $("<td></td>").text(todoList[todo].dueDate);
+            newRow.append(newDateColumn);
+
+            let newDeleteColumn = $("<td></td>");
+            let newDeleteButton = $("<input>")
+                .attr("type", "button")
+                .val("DELETE")
+                .on("click", function () {
                     deleteTodo(todo);
                 })
-            newElement.appendChild(newContent);
-            newElement.appendChild(newDeleteButton);
-            todoListDiv.appendChild(newElement);
+                .addClass("btn btn-danger");
+            newRow.append(newDeleteColumn);
+            newDeleteColumn.append(newDeleteButton);
+
+            todoListTable.append(newRow);
         }
     }
 }
 
-setInterval(updateTodoList, 1000);
-
 let deleteTodo = function (index) {
     todoList.splice(index, 1);
+    updateJSONBin();
 }
 
 let addTodo = function () {
     //get the elements in the form
-    let inputTitle = document.getElementById("inputTitle");
-    let inputDescription = document.getElementById("inputDescription");
-    let inputPlace = document.getElementById("inputPlace");
-    let inputDate = document.getElementById("inputDate");
+
     //get the values from the form
-    let newTitle = inputTitle.value;
-    let newDescription = inputDescription.value;
-    let newPlace = inputPlace.value;
-    let newDate = inputDate.value;
+    let newTitle = $("#inputTitle").val();
+    let newDescription = $("#inputDescription").val();
+    let newPlace = $("#inputPlace").val();
+    let newDate = $("#inputDate").val();
     //create new item
     let newTodo = {
         title: newTitle,
@@ -86,4 +142,9 @@ let addTodo = function () {
     //add item to the list
     todoList.push(newTodo);
     window.localStorage.setItem("todos", JSON.stringify(todoList));
+    updateJSONBin();
 }
+
+//initList();
+readAPI();
+setInterval(updateTodoList, 1000);
