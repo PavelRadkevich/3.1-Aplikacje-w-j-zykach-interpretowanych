@@ -1,5 +1,7 @@
 "use strict"
 let todoList = []; //declares a new Array for Your todo list
+const BASE_URL = "https://api.jsonbin.io/v3/b/652e995f0574da7622ba151f";
+const SECRET_KEY = "$2a$10$wbDrNT7oAp8B3CTsAhzIi.5NNUMA6mrcxs/b.rU5s4q1Vae0cQ59u";
 
 let initList = function () {
    let savedList = window.localStorage.getItem("todos");
@@ -26,21 +28,40 @@ let initList = function () {
 }
 
 let readAPI = function() {
-    let req = new XMLHttpRequest();
+    /*let req = new XMLHttpRequest();
 
     req.onreadystatechange = () => {
         if (req.readyState == XMLHttpRequest.DONE) {
             todoList = JSON.parse(req.responseText).record;
+            updateTodoList();
         }
     };
     req.open("GET", "https://api.jsonbin.io/v3/b/652e995f0574da7622ba151f", true);
     req.setRequestHeader("X-Master-Key", "$2a$10$wbDrNT7oAp8B3CTsAhzIi.5NNUMA6mrcxs/b.rU5s4q1Vae0cQ59u");
     req.setRequestHeader("X-Access-Key", "$2a$10$bfr80LuP/W/mo5x/53QO4O84.NV3lLXQTLJn99xSv1Yn/sBmG5c/S")
-    req.send();
+    req.send();*/
+
+    $.ajax({
+        // copy Your bin identifier here. It can be obtained in the dashboard
+        url: BASE_URL,
+        type: 'GET',
+        headers: { //Required only if you are trying to access a private bin
+            'X-Master-Key': SECRET_KEY,
+
+        },
+        success: (data) => {
+            todoList = data.record;
+            updateTodoList();
+        },
+        error: (err) => {
+            console.log(err.responseJSON);
+        }
+    });
 }
 
 let updateJSONBin = function () {
-    let req = new XMLHttpRequest();
+    /*let req = new XMLHttpRequest();
+    updateTodoList();
 
     req.onreadystatechange = () => {
         if (req.readyState == XMLHttpRequest.DONE) {
@@ -51,7 +72,24 @@ let updateJSONBin = function () {
     req.open("PUT", "https://api.jsonbin.io/v3/b/652e995f0574da7622ba151f", true);
     req.setRequestHeader("Content-Type", "application/json");
     req.setRequestHeader("X-Master-Key", "$2a$10$wbDrNT7oAp8B3CTsAhzIi.5NNUMA6mrcxs/b.rU5s4q1Vae0cQ59u");
-    req.send(JSON.stringify(todoList));
+    req.send(JSON.stringify(todoList));*/
+
+    updateTodoList();
+        $.ajax({
+            url: BASE_URL,
+            type: 'PUT',
+            headers: { //Required only if you are trying to access a private bin
+                'X-Master-Key': SECRET_KEY
+            },
+            contentType: 'application/json',
+            data: JSON.stringify(todoList),
+            success: (data) => {
+                console.log(data);
+            },
+            error: (err) => {
+                console.log(err.responseJSON);
+            }
+        });
 }
 
 let updateTodoList = function () {
@@ -145,6 +183,4 @@ let addTodo = function () {
     updateJSONBin();
 }
 
-//initList();
 readAPI();
-setInterval(updateTodoList, 1000);

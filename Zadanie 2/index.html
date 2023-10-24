@@ -18,19 +18,19 @@
         <h1 class="h1 mb-3 text-center">MyNotes</h1>
         <div class="row mb-4 justify-content-center" >
             <div class="col-2">
-                <input type="text" id="inputSearch" placeholder="Type your search here" class="form-control">
+                <input type="text" id="inputSearch" placeholder="Type your search here" class="form-control" oninput="updateTodoList()">
                 <div class="form-text">
                     Search by word
                 </div>
             </div>
             <div class="col-2">
-                <input type="date" id="inputDateFrom" class="form-control">
+                <input type="date" id="inputDateFrom" class="form-control" oninput="updateTodoList()" >
                 <div class="form-text">
                     Date From
                 </div>
             </div>
-            <div class="col-2">
-                <input type="date" id="inputDateTo" class="form-control">
+            <div class="col-2"> 
+                <input type="date" id="inputDateTo" class="form-control" oninput="updateTodoList()">
                 <div class="form-text text-left">
                     Date To
                 </div>
