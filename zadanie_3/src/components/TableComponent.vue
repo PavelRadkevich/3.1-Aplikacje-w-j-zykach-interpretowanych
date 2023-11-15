@@ -19,7 +19,7 @@
             </tbody>
         </table>
             <div class="mx-auto">
-                <button type="button" class="btn btn-primary" @click="showMoreMovies">Show more</button>
+                <button type="button" class="btn btn-primary" @click="showMoreMovies">Pokaż więcej</button>
             </div>
     </div>
 </template>

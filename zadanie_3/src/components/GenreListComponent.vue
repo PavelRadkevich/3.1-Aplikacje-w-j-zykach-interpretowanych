@@ -1,16 +1,6 @@
-<template>
+п»ї<template>
     <div class="container">
-        <h1>Filmy wg gatunku</h1>
-        <div v-for="(movies, genre) in filteredMovies" :key="genre">
-            <h1>Doszedlem pierszy</h1>
-            <p>{{ genres }}</p>
-            <ol>
-                <li v-for="movie in movies" :key="movie.title">
-                    {{ movie.title }}
-                </li>
-            </ol>
-        </div>
-
+        <h1>Filmy wedЕ‚ug gatunku</h1>
         <div v-for="genre in uniqueGenres" :key="genre">
             <p>{{ genre }}</p>
             <ol>
@@ -19,10 +9,6 @@
                 </li>
             </ol>
         </div>
-        <p>Comedy</p>
-        <ol>
-            <li>Special Delivery</li>
-        </ol>
     </div>
 </template>
 
@@ -61,5 +47,5 @@
 </script>
 
 <style>
-    /* Здесь ваши стили для компонента */
+    /* Р—РґРµСЃСЊ РІР°С€Рё СЃС‚РёР»Рё РґР»СЏ РєРѕРјРїРѕРЅРµРЅС‚Р° */
 </style>
